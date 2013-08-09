@@ -1,0 +1,165 @@
+<html>
+  <head>
+    <title>JavaScript REST Client App</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+	  <script>
+
+      var people = [];
+      var person = {};
+
+      function valueOf(value) {
+        return (value != null ? value : '');
+      }
+
+      function sendRequest(url) {
+        $.getJSON(url, function(data) {
+          console.log(data);
+          //console.log(JSON.stringify(data));
+          handleResponse(data);
+        });
+      }
+
+      function handleResponse(data) {
+        people = data['People'];
+
+        var html = '<table id="peopleResults" border="1" cellpadding="1" cellspacing="0"><tr>';
+
+        html += '<tr>';
+        //html += '<th>Type</th>';
+        html += '<th width="50">ID</th>';
+        html += '<th width="100">First Name</th>';
+        html += '<th width="50">M.I.</th>';
+        html += '<th width="150">Last Name</th>';
+        html += '<th width="100">Birth Date</th>';
+        html += '<th width="100">Gender</th>';
+        html += '<th width="100">Action</th>';
+        html += '</tr>';
+
+        $(people).each(function(index, element) {
+          //console.log(index);
+          //console.log(element);
+          var innerHTML = '<tr>';
+          //innerHTML += '<td>' + element['@type'] + '</td>';
+          innerHTML += '<td>' + valueOf(element['id']) + '</td>';
+          innerHTML += '<td>' + element['firstName'] + '</td>';
+          innerHTML += '<td>' + element['middleName'] + '</td>';
+          innerHTML += '<td>' + element['lastName'] + '</td>';
+          innerHTML += '<td>' + valueOf(element['birthDate']) + '</td>';
+          innerHTML += '<td>' + valueOf(element['gender']) + '</td>';
+          innerHTML += '<td><a class="edit" href="javascript:editPerson(' + index + ')">Edit</a></td>';
+          innerHTML += '</tr>'
+          html += innerHTML;
+        });
+
+        html += '</table>';
+        //alert('html (' + html + ')');
+
+        $('#result').empty();
+        $('#result').append(html);
+      }
+
+      function editPerson(index) {
+        person = people[index];
+
+        // populate form...
+        $('#firstName').val(person['firstName']);
+        $('#middleName').val(person['middleName']);
+        $('#lastName').val(person['lastName']);
+        $('#birthDate').val(person['birthDate']);
+        $('#gender').val(person['gender']);
+
+        $('#edit-person-dialog').dialog("open");
+      }
+
+      $(document).ready(function() {
+        $('#birthDate').datepicker({ dateFormat: "mm/dd/yy" });
+
+        $('#edit-person-dialog').dialog({
+          autoOpen: false,
+          height: 500,
+          width: 400,
+          modal:true, buttons: {
+            "Save": function() {
+              //alert('Saving Person...');
+
+              // update person...
+              person['firstName'] = $('#firstName').val();
+              person['middleName'] = $('#middleName').val();
+              person['lastName'] = $('#lastName').val();
+              person['birthDate'] = $('#birthDate').val();
+              person['gender'] = $('#gender').val();
+
+              console.log(person);
+              console.log(JSON.stringify(person));
+
+              var url = $('#restUrl').val();
+
+              $.ajax({
+                url: url + '/' + person['id'],
+                type: 'PUT',
+                data: JSON.stringify(person),
+                contentType: 'application/json',
+                dataType: 'json',
+                statusCode: {
+                  200: function() {
+                    sendRequest(url);
+                  }
+                }
+              });
+
+              $(this).dialog('close');
+            },
+            "Cancel": function() {
+              $(this).dialog('close');
+            }
+          }
+        });
+
+        $('#sendRequest').click(function() {
+          var url = $('#restUrl').val();
+          //alert('sending request to... (' + url + ')');
+          /*
+          $.getJSON(url, function(data) {
+            $.each(data, function (linktext, link) {
+              console.log(linktext);
+              console.log(link);
+            });
+          });
+          */
+          sendRequest(url);
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h2>People Search</h2>
+    REST Service URL: <input id="restUrl" type="text" size="50" value="http://localhost:8080/gemfire-api/v2/People"/>
+    <input id="sendRequest" type="button" value="Send"/>
+    <br/>
+
+    <div id="edit-person-dialog" title="Edit Person">
+      <form id="personForm" name="personForm">
+        <fieldset>
+          <label for="firstName">First Name: </label>
+          <input id="firstName" type="text" name="firstName" class="text ui-widget-content ui-corner-all" />
+          <label for="middleName">M.I.: </label>
+          <input id="middleName" type="text" name="middleName" class="text ui-widget-content ui-corner-all" />
+          <label for="lastName">Last Name: </label>
+          <input id="lastName" type="text" name="lastName" class="text ui-widget-content ui-corner-all" />
+          <label for="birthDate">Birth Date: </label>
+          <input id="birthDate" type="text" name="birthDate" class="text ui-widget-content ui-corner-all" />
+          <label for="gender">Gender: </label>
+          <select id="gender" name="gender" class="text ui-widget-content ui-corner-all">
+            <option value="FEMALE">FEMALE</option>
+            <option value="MALE">MALE</option>
+          </select>
+        </fieldset>
+      </form>
+    </div>
+
+    <div id="result"></div>
+  </body>
+</html>

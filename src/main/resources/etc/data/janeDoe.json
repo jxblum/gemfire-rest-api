@@ -1,0 +1,7 @@
+{
+  "@type" : "org.gopivotal.app.domain.Person",
+  "firstName" : "Jane",
+  "middleName" : "P",
+  "lastName" : "Doe",
+  "gender" : "FEMALE"
+}

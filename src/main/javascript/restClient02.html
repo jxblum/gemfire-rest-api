@@ -1,0 +1,79 @@
+<html>
+  <head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script>
+		$(document).on('click', 'td a.edit', function () {
+			//new_dialog('Edit', $(this).parents('tr'));
+			alert('User has clicked on edit link');
+			//new_dialog('Edit', $(this).parents('tr'));
+			return false;
+		});
+	
+		function callURL(url,handler){
+			var args= {};
+			$.get(url, 
+			//args,
+			function(data) {
+				//alert('Data <'+ data +'> <'+ data[1].id +'>');
+				//var json = $.parseJSON(data);
+				if(url == "http://localhost:8080/gemfire-api/v2/People") {
+					handler(data.People);
+				}  
+				else if (url == "http://localhost:8080/gemfire-api/v2/Products"){
+				 alert('URL:: ' + url);
+					handler(data.Products);
+				 }else {
+				  alert('URL:: ' + url);
+				 }
+			});
+		}
+
+		function myHandler(responseObject){
+			var html='<table border="1"><tr>';
+			for(var propName in responseObject[0]) {
+				html = html + '<th>' + propName + '</th>';
+			}
+			html += '</tr>';
+			$(responseObject).each(
+				function(i,val){
+					var innerHTML = "<tr>";
+					for(var propName in val) {
+						innerHTML += '<td>'+ val[propName] + "</td>";
+					}
+					innerHTML += '<td><a class="edit" href="">Edit</a></td>';
+					innerHTML +="</tr>"
+					html += innerHTML;
+				});
+			html = html + "</table>";
+			alert('final html <'+html+'>');
+			$('#result').append(html);
+		}
+
+		jQuery(document).ready(function(){
+			alert('Hi');
+			$('#callURL').click(function(){
+				var url = $('#textField').val();
+				alert('calling url <'+url+'>');
+				callURL(url,myHandler);
+			});
+		});
+		
+</script>
+  </head>
+  <body>
+  
+  
+  <input type="text" id="textField" size="180"/>
+  <input type="button" id="callURL" value="Load"/>
+  
+  
+  <div id="result"></div>
+  
+  
+  
+  
+  </body>
+  
+  </html>

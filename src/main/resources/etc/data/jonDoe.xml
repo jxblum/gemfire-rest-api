@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<person id="1373567170232">
+  <firstName>Jon</firstName>
+  <middleName>T</middleName>
+  <lastName>Doe</lastName>
+  <birthDate>1977-06-12T00:00:00-07:00</birthDate>
+  <gender>MALE</gender>
+</person>

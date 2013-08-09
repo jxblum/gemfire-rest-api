@@ -1,0 +1,8 @@
+{
+  "@type" : "org.gopivotal.app.domain.Product",
+  "serialNumber" : "QRJ321R4XXU501",
+  "name" : "iPod",
+  "description" : "Apple iPod 256 GB",
+  "price" : "199.99",
+  "units" : "10128768"
+}

@@ -1,0 +1,8 @@
+{
+  "@type" : "org.gopivotal.app.domain.Product",
+  "serialNumber" : "AA123RRJ456QR7890",
+  "name" : "iPhone",
+  "description" : "Apple iPhone 5 64 GB",
+  "price" : "399.99
+  "units" : "3500100"
+}

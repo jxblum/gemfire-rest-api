@@ -1,0 +1,78 @@
+<html>
+  <head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <!--script type="text/javascript" src="script.js"></script-->
+	<script>
+	
+	$(document).on('click', 'td a.edit', function () {
+        //new_dialog('Edit', $(this).parents('tr'));
+		alert('User has clicked on edit link');
+		new_dialog('Edit', $(this).parents('tr'));
+        return false;
+    });
+	
+	function callURL(url,handler){
+		var args= {};
+		$.get(url, 
+			//args,
+			function(data) {
+				alert('Data <'+ data +'> <'+ data[0].id +'>');
+				//var json = $.parseJSON(data);		
+				handler(data);
+				//handler(data[0]);		
+			});
+	}
+	
+	function myHandler(responseObject){
+	
+		var html='<table border="1"><div id="dialog-form" title="Create new user"><form><tr>';
+		for(var propName in responseObject[0]) {
+			html = html + '<th>' + propName + '</th>';			
+		}
+		html += '</tr>';
+		
+		$(responseObject).each(		
+		function(i,val){
+			var innerHTML = "<tr>";	
+			for(var propName in val) {
+				//innerHTML += '<td><input type="text" name="">'+ val[propName] + "</td>";	
+				//alert(propName + 'And' + val[propName]);
+				innerHTML += '<td><input type="text" name="' + propName + '" id="' + propName + '" value="' + val[propName] + '" border: none border-color: transparent </td>';	
+			}
+			innerHTML += '<td><a class="edit" href="">Edit</a></td>';
+			innerHTML +="</tr>"
+			html += innerHTML;
+		});
+		
+		html = html + "</form></div></table>";
+		alert('final html <'+html+'>');
+		$('#result').append(html);
+	}
+	
+	jQuery(document).ready(function(){
+		alert('Hi');
+		$('#callURL').click(function(){
+			var url = $('#textField').val();
+			alert('calling url <'+url+'>');
+			callURL(url,myHandler);
+		});
+	});
+	</script>
+  </head>
+  <body>
+  
+  
+  <input type="text" id="textField" size="180"/>
+  <input type="button" id="callURL" value="Load"/>
+  
+  
+  <div id="result"></div>
+  
+  
+  
+  
+  </body>
+  
+  </html>

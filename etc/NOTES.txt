@@ -1,0 +1,149 @@
+The NOTES.txt file provide documentation for the GemFire Developer REST API web application.
+
+### SETUP GUIDE ###
+
+The following instructions provide details for setting up the GemFire Developer REST API Web Application...
+
+Note, that the Developer REST API web app requires GemFire 7.5 (Cedar) or later as well as Apache Tomcat 7.x or later.
+
+1. Start Gfsh and then start a GemFire Locator using the following command.
+
+gfsh> start locator --name=locatorX --port=11235 --log-level=config -J=-Dgemfire.jmx-manager-http-port=8090
+
+You need to set the JMX Manager's HTTP port to a value other than 8080 or change your Tomcat installation to use a port
+other than 8080.  If you attempt to run the GemFire Manager's (Locator) HTTP service on 8080 and if Tomcat is set to
+listen on 8080, then you will no doubt encounter a port bind exception.  You can also disable the GemFire Manager's
+HTTP service by setting the port to 0.  From the locatorX.log file...
+
+[info 2013/07/12 11:07:23.939 PDT locatorX <locator request thread[1]> tid=0x29] (tid=11 msgId=83) Starting ProtocolHandler ["http-bio-8090"]
+
+Note, you can set the Locator port to any available port (e.g. 11235).  It is not recommended to use the default port
+of 10334.
+
+Finally, if you are on a wireless network, then it is recommended to set the bind-address to the wireless adapter..
+
+gfsh> start locator --name... --bind-address=10.222.112.10
+
+2. Setup the gemfire-rest-api project in your IDE.  By default, a pom.xml file is provided.  Also, the ZIP file contains
+the .idea directory for configuring IntelliJ IDEA.
+
+3. Configure the GemFire peer.  Open the gemfire-rest-api project's gemfire.properties file and set the locators property...
+
+The gemfire-api web app is a peer in the GemFire cluster (distributed system).  Therefore, by starting a Locator in step
+1 and configuring the web app to connect to the Locator on startup, you form a distributed system.
+
+locators=localhost[11235]
+
+4. Install GemFire 7.5  (Cedar) to the your user's local Maven repository...
+
+The Spring Maven Plugins repository (http://repo.springsource.org/plugins-release) only has version 7.0.1 of GemFire.
+
+See the following link (http://maven.apache.org/guides/mini/guide-3rd-party-jars-local.html) for setting up 3rd party
+JAR files in the local Maven repository.  Command is roughly equivalent to...
+
+$ mvn install:install-file -Dfile=$GEMFIRE_HOME/build-artifacts/mac/product/lib/gemfire.jar -DgroupId=com.gemstone.gemfire
+-DartifactId=gemfire -Dversion=7.5 -Dpackaging=jar
+
+Where $GEMFIRE_HOME is set to your working directory of (cedar_dev_Oct12).
+
+5. In the working directory of the gemfire-rest-api project, run...
+
+$ mvn clean install
+
+6. Copy WAR file to $TOMCAT_HOME/webapps...
+
+$ cp ./target/gemfire-api-1.0.0.war $TOMCAT_HOME/webapps/gemfire-api.war
+
+Where $TOMCAT_HOME is set to your installation of Tomcat 7.x.
+
+Note, the gemfire-api-1.0.0.war has been renamed to gemfire-api.war when copied to the Tomcat webapps directory as Tomcat
+will use the name of the WAR file as the web applicaton context on deployment by default.
+
+7. Start Tomcat...
+
+$ $TOMCAT_HOME/bin/startup.sh
+
+Check either the $TOMCAT_HOME/logs/localhost.year-month-day.log or the $TOMCAT_HOME/logs/catalina.out for errors
+on startup...
+
+
+From $TOMCAT_HOME/logs/localhost.2013-month-day.log
+
+Jul 12, 2013 11:10:29 AM org.apache.catalina.core.ApplicationContext log
+INFO: No Spring WebApplicationInitializer types detected on classpath
+Jul 12, 2013 11:10:29 AM org.apache.catalina.core.ApplicationContext log
+INFO: Initializing Spring root WebApplicationContext
+Jul 12, 2013 11:10:40 AM org.apache.catalina.core.ApplicationContext log
+INFO: Initializing Spring FrameworkServlet 'gemfire-api'
+Jul 12, 2013 11:10:41 AM org.apache.catalina.core.ApplicationContext log
+...
+..
+.
+
+From $TOMCAT_HOME/logs/catalina.out
+
+INFO: Starting Servlet Engine: Apache Tomcat/7.0.33
+Jul 12, 2013 11:10:26 AM org.apache.catalina.startup.HostConfig deployWAR
+INFO: Deploying web application archive /Users/jblum/vmdev/apache-tomcat-7.0.33/webapps/gemfire-api.war
+...
+..
+.
+
+
+You can also check the Locator log file under the Gfsh working directory in (locatorX/locatorX.log) to determine whether GemFire successfully joined with the web app peer and generated
+a new Membership view...
+
+
+[config 2013/07/12 00:21:26.632 PDT locatorX <UDP Incoming Message Handler> tid=0x23] Membership: received new view  [jblum-mbpro(locatorX:36333:locator)<v0>:12225|20] [jblum-mbpro(locatorX:36333:locator)<v0>:12225/43972]
+
+[info 2013/07/12 00:21:31.481 PDT locatorX <VERIFY_SUSPECT.TimerThread> tid=0xf5] jblum-mbpro(locatorX:36333:locator)<v0>:12225: No suspect verification response received from jblum-mbpro(restApiServer:39458)<v19>:17561 in 5001 milliseconds: I believe it is gone.
+
+[config 2013/07/12 00:22:04.243 PDT locatorX <ViewHandler> tid=0x61] Membership: sending new view [[jblum-mbpro(locatorX:36333:locator)<v0>:12225|21] [jblum-mbpro(locatorX:36333:locator)<v0>:12225/43972, jblum-mbpro(restApiServer:39720)<v21>:34091/9599]] (2 mbrs)
+
+
+[config 2013/07/12 00:22:04.250 PDT locatorX <UDP Incoming Message Handler> tid=0x23] Membership: received new view  [jblum-mbpro(locatorX:36333:locator)<v0>:12225|21] [jblum-mbpro(locatorX:36333:locator)<v0>:12225/43972, jblum-mbpro(restApiServer:39720)<v21>:34091/9599]
+
+[info 2013/07/12 00:22:04.250 PDT locatorX <UDP Incoming Message Handler> tid=0x23] Membership: lead member is now jblum-mbpro(restApiServer:39720)<v21>:34091
+
+[info 2013/07/12 00:22:04.252 PDT locatorX <View Message Processor> tid=0x63] Admitting member <jblum-mbpro(restApiServer:39720)<v21>:34091>. Now there are 2 non-admin member(s).
+
+
+8. Finally, you should be able to use either CURL or the Spring REST Shell to issue Web Service calls to the web app.  By default,
+the web app creates 2 Regions: People and Products.  You can issue an HTTP request to...
+
+GET http://localhost:8080/gemfire-api/v2/People
+
+And get an HTTP response...
+
+http://localhost:8080/gemfire-api/v2/People:> get
+> GET http://localhost:8080/gemfire-api/v2/People/
+> Content-Type: application/xml
+
+< 200 OK
+< Server: Apache-Coyote/1.1
+< Content-Type: application/json
+< Transfer-Encoding: chunked
+< Date: Fri, 12 Jul 2013 18:15:39 GMT
+<
+{
+  "People" : [ ]
+}
+
+
+### IMPLEMENTATION DETAILS ###
+
+1. Using Spring Data GemFire vs. using GemFire API CacheFactory.getAnyInstance() to get a reference to the Cache.
+
+2. Key types will only be primitively typed, such as a String or numeric value (Long).  Keys will not be complex Objects.
+
+3. Content Negotiation and Type System/Handling (Declaration).
+
+4. Exception Handling as it pertains to business logic implemented in CacheListeners, etc.
+
+5. Querying with Sort Direction and Order By, Start Index and Retrieval Count.
+
+6.
+
+### Presentation ###
+
+1.  Optional Features Grouped By: Additional Features/Functionality, Performance, Convenience

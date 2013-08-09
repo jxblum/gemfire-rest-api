@@ -1,0 +1,8 @@
+{
+  "@type" : "org.gopivotal.app.domain.Product",
+  "serialNumber" : "A1JJQRX456UUIT99",
+  "name" : "iPad",
+  "description" : "Apple iPad 4 Retina 128 GB",
+  "price" : "899.99",
+  "units" : "1256789"
+}
