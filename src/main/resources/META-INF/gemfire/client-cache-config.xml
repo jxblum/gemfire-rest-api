@@ -19,8 +19,15 @@
   </gfe-data:datasource>
 
   <gfe:client-region id="People" shortcut="PROXY"/>
+
+  <!--gfe:client-region id="peopleAddress" name="People/Address" shortcut="PROXY"/-->
+
   <!--gfe:client-region id="Products" shortcut="PROXY"/-->
 
-  <bean id="gemfireTemplate" class="org.springframework.data.gemfire.GemfireTemplate" p:region-ref="People"/>
+  <bean id="peopleRegionTemplate" class="org.springframework.data.gemfire.GemfireTemplate" p:region-ref="People"/>
+
+  <!--bean id="peopleAddressRegionTemplate" class="org.springframework.data.gemfire.GemfireTemplate" p:region-ref="People/Address"/-->
+
+  <!--bean id="productsRegionTemplate" class="org.springframework.data.gemfire.GemfireTemplate" p:region-ref="Products"/-->
 
 </beans>

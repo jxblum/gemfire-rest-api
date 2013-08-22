@@ -8,8 +8,8 @@ import java.util.Set;
 
 import com.gemstone.gemfire.cache.Region;
 import com.gemstone.gemfire.internal.GemFireVersion;
-import com.gemstone.gemfire.internal.util.ArrayUtils;
 
+import org.gopivotal.app.util.ArrayUtils;
 import org.springframework.hateoas.Link;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -28,23 +28,32 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @see org.springframework.stereotype.Controller
  * @see org.springframework.web.bind.annotation.RequestMapping
  * @since 7.5
+ * @version 1.0.0
  */
 @SuppressWarnings("unused")
 public abstract class CommonCrudController extends AbstractBaseController {
 
   @RequestMapping(method = RequestMethod.DELETE, value = "/{region}")
-  public ResponseEntity<?> delete(@PathVariable("region") final String region) {
+  public ResponseEntity<?> delete(@PathVariable("region") String region) {
+    region = decode(region);
+
     logger.info(String.format("Deleting all data in Region (%1$s)...", region));
+
     deleteValues(region);
+
     return new ResponseEntity<Object>(HttpStatus.OK);
   }
 
   @RequestMapping(method = RequestMethod.DELETE, value = "/{region}/{keys}")
-  public ResponseEntity<?> delete(@PathVariable("region") final String region,
+  public ResponseEntity<?> delete(@PathVariable("region") String region,
                                   @PathVariable("keys") final String[] keys)
   {
+    region = decode(region);
+
     logger.info(String.format("Deleting data for Keys (%1$s) in Region (%2$s)...", ArrayUtils.toString(keys), region));
+
     deleteValues(region, keys);
+
     return new ResponseEntity<Object>(HttpStatus.OK);
   }
 

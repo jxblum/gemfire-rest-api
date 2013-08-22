@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.gopivotal.app.util.UriUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.data.gemfire.GemfireTemplate;
@@ -33,7 +34,9 @@ public abstract class AbstractClientApp {
 
   // GemFire Cache Client configuration
   protected static final String APPLICATION_CONFIG_LOCATION = "META-INF/gemfire/client-cache-config.xml";
-  protected static final String GEMFIRE_TEMPLATE_BEAN_ID = "gemfireTemplate";
+  protected static final String PEOPLE_REGION_TEMPLATE_BEAN_ID = "peopleRegionTemplate";
+  protected static final String PEOPLE_ADDRESS_REGION_TEMPLATE_BEAN_ID = "peopleAddressRegionTemplate";
+  protected static final String PRODUCT_REGION_TEMPLATE_BEAN_ID = "productRegionTemplate";
 
   // GemFire REST API Web Service Interface configuration
   protected static final String BASE_URL = "http://localhost:8080";
@@ -43,24 +46,28 @@ public abstract class AbstractClientApp {
   protected static final URI GEMFIRE_REST_API_WEB_SERVICE_URL = URI.create(BASE_URL + GEMFIRE_REST_API_CONTEXT
     + GEMFIRE_REST_API_VERSION);
 
-  private static ApplicationContext context;
-
-  private static GemfireTemplate gemfireTemplate;
+  private static ApplicationContext applicationContext;
 
   private static RestTemplate restTemplate;
 
   protected static ApplicationContext getApplicationContext() {
-    if (context == null) {
-      context = new ClassPathXmlApplicationContext(APPLICATION_CONFIG_LOCATION);
+    if (applicationContext == null) {
+      applicationContext = new ClassPathXmlApplicationContext(APPLICATION_CONFIG_LOCATION);
     }
-    return context;
+
+    return applicationContext;
   }
 
-  protected static GemfireTemplate getGemFireTemplate() {
-    if (gemfireTemplate == null) {
-      gemfireTemplate = getApplicationContext().getBean(GEMFIRE_TEMPLATE_BEAN_ID, GemfireTemplate.class);
-    }
-    return gemfireTemplate;
+  protected static GemfireTemplate getPeopleRegionTemplate() {
+    return getApplicationContext().getBean(PEOPLE_REGION_TEMPLATE_BEAN_ID, GemfireTemplate.class);
+  }
+
+  protected static GemfireTemplate getPeopleAddressRegionTemplate() {
+    return getApplicationContext().getBean(PEOPLE_ADDRESS_REGION_TEMPLATE_BEAN_ID, GemfireTemplate.class);
+  }
+
+  protected static GemfireTemplate getProductRegionTemplate() {
+    return getApplicationContext().getBean(PRODUCT_REGION_TEMPLATE_BEAN_ID, GemfireTemplate.class);
   }
 
   protected static RestTemplate getRestTemplate() {
@@ -79,6 +86,7 @@ public abstract class AbstractClientApp {
 
       restTemplate.setMessageConverters(messageConverters);
     }
+
     return restTemplate;
   }
 
@@ -115,7 +123,7 @@ public abstract class AbstractClientApp {
   }
 
   protected static URI toUri(final URI baseUrl, final String... pathSegments) {
-    return UriComponentsBuilder.fromUri(baseUrl).pathSegment(pathSegments).build().toUri();
+    return UriComponentsBuilder.fromUri(baseUrl).pathSegment(UriUtils.encode(pathSegments)).build().encode().toUri();
   }
 
 }

@@ -1,0 +1,8 @@
+{
+  "@type" : "org.gopivotal.app.domain.Address",
+  "id" : "1",
+  "street1" : "314 NW Washington",
+  "city" : "Cuba City",
+  "state" : "WISCONSIN",
+  "zipCode" : "12345"
+}

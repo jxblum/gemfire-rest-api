@@ -1,13 +1,14 @@
 package org.gopivotal.app.client;
 
 import java.net.URI;
-import java.net.URLEncoder;
 import java.util.Calendar;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import org.gopivotal.app.domain.Address;
 import org.gopivotal.app.domain.Gender;
 import org.gopivotal.app.domain.Person;
+import org.gopivotal.app.domain.State;
 import org.gopivotal.app.util.DateTimeUtils;
 import org.gopivotal.app.web.controllers.support.UpdateOp;
 import org.springframework.web.client.RestClientException;
@@ -24,26 +25,33 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class RestClientApp extends AbstractClientApp {
 
   private static final String OP_URL_QUERY_PARAMETER_NAME = "op";
-  private static final String PEOPLE_ADDRESS_REGION = "/People/Address";
-  private static final String PEOPLE_REGION = "/People";
 
   public static void main(final String... args) throws Exception {
-    doGet(PEOPLE_REGION, "1");
-    doGetAsJson(PEOPLE_REGION, "1");
-    doGetAsJson(URLEncoder.encode(PEOPLE_REGION, "UTF-8"), "1");
-    doGetAsJson(URLEncoder.encode(PEOPLE_ADDRESS_REGION, "UTF-8"), "1");
-    doPutAsReplace(PEOPLE_REGION);
-    doPutAsCas(PEOPLE_REGION);
+    //final Person jonDoe = doGet("/People", "1", Person.class);
+    //System.out.printf("Person is (%1$s)%n", jonDoe);
+
+    //final String json = doGetAsJson("/People", "1");
+    //System.out.printf("Person is (%1$s)%n", json);
+
+    doPost("/People/Address", new Address("2021 Yamhill", "Portland", State.OREGON, "12345"));
+
+    //final Address address = doGet("/People/Address", "4", Address.class);
+    //System.out.printf("Address is (%1$s)%n", address);
+
+    //doPutAsReplace("/People");
+    //doPutAsCas("/People");
   }
 
-  private static void doGet(final String regionNamePath, final String key) {
-    final Person person = getRestTemplate().getForObject(toUri(regionNamePath, key), Person.class);
-    System.out.printf("Person is (%1$s)%n", person);
+  private static <T> T doGet(final String regionNamePath, final String key, final Class<T> type) {
+    return getRestTemplate().getForObject(toUri(regionNamePath, key), type);
   }
 
-  private static void doGetAsJson(final String regionNamePath, final String key) {
-    final String personJson = getRestTemplate().getForObject(toUri(regionNamePath, key), String.class);
-    System.out.printf("Person is (%1$s)%n", personJson);
+  private static String doGetAsJson(final String regionNamePath, final String key) {
+    return getRestTemplate().getForObject(toUri(regionNamePath, key), String.class);
+  }
+
+  private static <T> void doPost(final String regionNamePath, final T domainObject) {
+    System.out.printf("Location is (%1$s)%n", getRestTemplate().postForLocation(toUri(regionNamePath), domainObject));
   }
 
   private static void doPutAsCas(final String regionNamePath) {

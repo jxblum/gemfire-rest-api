@@ -1,0 +1,9 @@
+{
+  "@type" : "org.gopivotal.app.domain.Address",
+  "id" : "1",
+  "street1" : "100 Main St.",
+  "street2" : "Suite 150",
+  "city" : "Portland",
+  "state" : "OREGON",
+  "zipCode" : "97006"
+}

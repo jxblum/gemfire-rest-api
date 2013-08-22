@@ -34,7 +34,7 @@
   <!--gfe:replicated-region id="People" persistent="false" destroy="true"/-->
 
   <gfe:replicated-region id="People" persistent="false" destroy="true">
-    <gfe:replicated-region name="Address" persistent="false" destroy="true"/>
+    <gfe:replicated-region name="Address" data-policy="REPLICATE" persistent="false" destroy="true"/>
   </gfe:replicated-region>
 
   <gfe:replicated-region id="Products" persistent="false" destroy="true"/>

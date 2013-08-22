@@ -1,8 +1,6 @@
 package org.gopivotal.app.web.controllers;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -26,6 +24,7 @@ import org.gopivotal.app.domain.support.ResourceSupport;
 import org.gopivotal.app.util.ArrayUtils;
 import org.gopivotal.app.util.IdentifiableUtils;
 import org.gopivotal.app.util.NumberUtils;
+import org.gopivotal.app.util.UriUtils;
 import org.gopivotal.app.util.ValidationUtils;
 import org.gopivotal.app.web.controllers.util.RegionNotFoundException;
 import org.gopivotal.app.web.controllers.util.ResourceNotFoundException;
@@ -48,6 +47,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
  * @see com.gemstone.gemfire.distributed.DistributedMember
  * @see com.gemstone.gemfire.distributed.DistributedSystem
  * @see org.gopivotal.app.domain.Identifiable
+ * @see org.gopivotal.app.domain.support.ResourceSupport
  * @see org.springframework.stereotype.Controller
  * @since 7.5
  * @version 1.0.0
@@ -58,9 +58,6 @@ public abstract class AbstractBaseController {
   protected static final String NEW_META_DATA_PROPERTY = "@new";
   protected static final String OLD_META_DATA_PROPERTY = "@old";
   protected static final String TYPE_META_DATA_PROPERTY = "@type";
-
-  protected static final String UTF_8 = "UTF-8";
-  protected static final String DEFAULT_ENCODING = UTF_8;
 
   private static final AtomicLong idSequence = new AtomicLong(0l);
 
@@ -98,16 +95,19 @@ public abstract class AbstractBaseController {
   }
 
   protected String decode(final String value) {
-    return decode(value, DEFAULT_ENCODING);
+    return UriUtils.decode(value);
   }
 
-  protected String decode(final String value, final String encoding) {
-    try {
-      return URLDecoder.decode(value, encoding);
-    }
-    catch (UnsupportedEncodingException e) {
-      throw new RuntimeException(e);
-    }
+  protected String decode(String value, final String encoding) {
+    return UriUtils.decode(value, encoding);
+  }
+
+  protected String encode(final String value) {
+    return UriUtils.encode(value);
+  }
+
+  protected String encode(final String value, final String encoding) {
+    return UriUtils.encode(value, encoding);
   }
 
   protected String generateKey(final String existingKey) {
