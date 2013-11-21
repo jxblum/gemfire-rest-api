@@ -19,8 +19,9 @@ import org.springframework.util.Assert;
 public class CacheClientApp extends AbstractClientApp {
 
   public static void main(final String... args) {
+    readPerson("3");
     //updatePerson("1");
-    createAddress(1l, "100 Main St.", "Portland", State.OREGON, "97005");
+    //createAddress(1l, "100 Main St.", "Portland", State.OREGON, "97005");
   }
 
   private static Address createAddress(final Long id,
@@ -34,6 +35,12 @@ public class CacheClientApp extends AbstractClientApp {
     address.setId(id);
 
     return getPeopleAddressRegionTemplate().put(id.toString(), address);
+  }
+
+  private static void readPerson(final String key) {
+    final Person person = getPeopleRegionTemplate().get(key);
+
+    System.out.printf("Person is (%1$s)%n", person);
   }
 
   private static void updatePerson(final String key) {

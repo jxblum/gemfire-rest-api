@@ -18,15 +18,23 @@
     <gfe-data:locator host="${client.locator.host}" port="${client.locator.port}"/>
   </gfe-data:datasource>
 
-  <gfe:client-region id="People" shortcut="PROXY"/>
+  <gfe:client-region id="peopleRegion" name="People" shortcut="PROXY"/>
 
+  <!--  throws SAXParseException invalid content in the <gfe:client-region/> element -->
+  <!--
+  <gfe:client-region id="peopleRegion" name="People" shortcut="PROXY">
+    <gfe:client-region name="Address" shortcut="PROXY"/>
+  </gfe:client-region>
+  -->
+
+  <!-- throws IllegalArgumentException name cannot contain the separator '/' -->
   <!--gfe:client-region id="peopleAddress" name="People/Address" shortcut="PROXY"/-->
 
   <!--gfe:client-region id="Products" shortcut="PROXY"/-->
 
-  <bean id="peopleRegionTemplate" class="org.springframework.data.gemfire.GemfireTemplate" p:region-ref="People"/>
+  <bean id="peopleRegionTemplate" class="org.springframework.data.gemfire.GemfireTemplate" p:region-ref="peopleRegion"/>
 
-  <!--bean id="peopleAddressRegionTemplate" class="org.springframework.data.gemfire.GemfireTemplate" p:region-ref="People/Address"/-->
+  <!--bean id="peopleAddressRegionTemplate" class="org.springframework.data.gemfire.GemfireTemplate" p:region-ref="peopleAddress"/-->
 
   <!--bean id="productsRegionTemplate" class="org.springframework.data.gemfire.GemfireTemplate" p:region-ref="Products"/-->
 

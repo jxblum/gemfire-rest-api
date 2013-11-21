@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.gemstone.gemfire.cache.Region;
+
 import org.gopivotal.app.util.UriUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -62,8 +64,19 @@ public abstract class AbstractClientApp {
     return getApplicationContext().getBean(PEOPLE_REGION_TEMPLATE_BEAN_ID, GemfireTemplate.class);
   }
 
+  @SuppressWarnings("unchecked")
   protected static GemfireTemplate getPeopleAddressRegionTemplate() {
-    return getApplicationContext().getBean(PEOPLE_ADDRESS_REGION_TEMPLATE_BEAN_ID, GemfireTemplate.class);
+    //return getApplicationContext().getBean(PEOPLE_ADDRESS_REGION_TEMPLATE_BEAN_ID, GemfireTemplate.class);
+
+    final Region peopleRegion = getApplicationContext().getBean("peopleRegion", Region.class);
+
+    assert peopleRegion != null : "The People Region was null!";
+
+    final Region peopleAddressRegion = peopleRegion.getSubregion("Address");
+
+    assert peopleAddressRegion != null : "The People/Address Region was null!";
+
+    return new GemfireTemplate(peopleAddressRegion);
   }
 
   protected static GemfireTemplate getProductRegionTemplate() {

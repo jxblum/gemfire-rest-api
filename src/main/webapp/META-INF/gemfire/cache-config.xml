@@ -29,9 +29,13 @@
   <gfe:cache-server auto-startup="true" bind-address="${server.bind.address}" port="${server.port}"
                     max-connections="${server.max.connections}" host-name-for-clients="${server.hostname.for.clients}"/>
 
-  <!--gfe:replicated-region id="__PersistentQueries__" persistent="false" destroy="true"/-->
+  <!--
+  <gfe:replicated-region id="__PersistentQueries__" persistent="false" destroy="true"/>
+  -->
 
-  <!--gfe:replicated-region id="People" persistent="false" destroy="true"/-->
+  <!--
+  <gfe:replicated-region id="People" persistent="false" destroy="true"/>
+  -->
 
   <gfe:replicated-region id="People" persistent="false" destroy="true">
     <gfe:replicated-region name="Address" data-policy="REPLICATE" persistent="false" destroy="true"/>
