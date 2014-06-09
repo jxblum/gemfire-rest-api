@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @since 7.5
  */
 @Controller("functionController")
-@RequestMapping("/functions")
+@RequestMapping(FunctionAccessController.REST_API_VERSION + "/functions")
 @SuppressWarnings("unused")
 public class FunctionAccessController extends AbstractBaseController {
 
@@ -84,21 +84,25 @@ public class FunctionAccessController extends AbstractBaseController {
     if (StringUtils.hasText(region)) {
       logger.info(String.format("Executing Function (%1$s) with arguments (%2$s) on Region (%3$s)...", functionId,
         ArrayUtils.toString(arguments), region));
+
       function = FunctionService.onRegion(getRegion(region));
     }
     else if (ArrayUtils.isNotEmpty(members)) {
       logger.info(String.format("Executing Function (%1$s) with arguments (%2$s) on Member (%3$s)...", functionId,
         ArrayUtils.toString(arguments), ArrayUtils.toString(members)));
+
       function = FunctionService.onMembers(getMembers(members));
     }
     else if (ArrayUtils.isNotEmpty(groups)) {
       logger.info(String.format("Executing Function (%1$s) with arguments (%2$s) on Groups (%3$s)...", functionId,
         ArrayUtils.toString(arguments), ArrayUtils.toString(groups)));
+
       function = FunctionService.onMembers(groups);
     }
     else {
       logger.info(String.format("Executing Function (%1$s) with arguments (%2$s) on all Members...", functionId,
         ArrayUtils.toString(arguments)));
+
       function = FunctionService.onMembers(getCache().getMembers());
     }
 

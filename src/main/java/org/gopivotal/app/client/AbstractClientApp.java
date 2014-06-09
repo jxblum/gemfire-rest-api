@@ -35,7 +35,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public abstract class AbstractClientApp {
 
   // GemFire Cache Client configuration
-  protected static final String APPLICATION_CONFIG_LOCATION = "META-INF/gemfire/client-cache-config.xml";
+  protected static final String APPLICATION_CONFIG_LOCATION = "META-INF/gemfire/gemfire-client-cache.xml";
   protected static final String PEOPLE_REGION_TEMPLATE_BEAN_ID = "peopleRegionTemplate";
   protected static final String PEOPLE_ADDRESS_REGION_TEMPLATE_BEAN_ID = "peopleAddressRegionTemplate";
   protected static final String PRODUCT_REGION_TEMPLATE_BEAN_ID = "productRegionTemplate";

@@ -41,14 +41,17 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
  * Controller implementations with interactions with GemFire.
  * <p/>
  * @author John Blum
+ * @see com.fasterxml.jackson.databind.ObjectMapper
  * @see com.gemstone.gemfire.cache.Cache
  * @see com.gemstone.gemfire.cache.Region
  * @see com.gemstone.gemfire.cache.query.QueryService
  * @see com.gemstone.gemfire.distributed.DistributedMember
  * @see com.gemstone.gemfire.distributed.DistributedSystem
- * @see org.gopivotal.app.domain.Identifiable
+ * @see com.gemstone.gemfire.pdx.JSONFormatter
+ * @see com.gemstone.gemfire.pdx.PdxInstance
  * @see org.gopivotal.app.domain.support.ResourceSupport
  * @see org.springframework.stereotype.Controller
+ * @see org.springframework.web.servlet.support.ServletUriComponentsBuilder
  * @since 7.5
  * @version 1.0.0
  */

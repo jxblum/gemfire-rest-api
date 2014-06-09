@@ -1,12 +1,9 @@
 package org.gopivotal.app.web.controllers;
 
-import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.gemstone.gemfire.cache.Region;
-import com.gemstone.gemfire.cache.query.Query;
 
 import org.gopivotal.app.util.ValidationUtils;
 import org.gopivotal.app.web.controllers.util.ResourceNotFoundException;
@@ -25,6 +22,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import com.gemstone.gemfire.cache.Region;
+import com.gemstone.gemfire.cache.query.Query;
+
 /**
  * The QueryingController class...
  * <p/>
@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @since 7.x
  */
 @Controller("queryController")
-@RequestMapping("/queries")
+@RequestMapping(QueryAccessController.REST_API_VERSION + "/queries")
 @SuppressWarnings("unused")
 public class QueryAccessController extends AbstractBaseController {
 
@@ -56,7 +56,7 @@ public class QueryAccessController extends AbstractBaseController {
   @ResponseBody
   @ResponseStatus(HttpStatus.OK)
   public Link[] list() {
-    logger.info("Listing all parameterized Queries in GemFire...");
+    logger.info("Listing all Parameterized Queries in GemFire...");
 
     final Region<Object, ?> parameterizedQueryRegion = getRegion(PARAMETERIZED_QUERIES_REGION);
 

@@ -16,17 +16,24 @@
 
   <context:component-scan base-package="org.gopivotal.app.web"/>
 
+  <context:property-placeholder location="classpath:swagger.properties"/>
+
   <mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">
     <mvc:message-converters register-defaults="false">
       <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
       <bean class="org.springframework.http.converter.ResourceHttpMessageConverter"/>
       <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
+      <bean class="org.gopivotal.app.http.converter.json.CustomMappingJackson2HttpMessageConverter" p:objectMapper-ref="objectMapper"/>
+      <!--
       <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" p:objectMapper-ref="objectMapper"/>
-      <!--bean class="org.gopivotal.app.http.converter.json.JsonToPdxInstanceHttpMessageConverter"/-->
-      <!--bean class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter"/-->
+      <bean class="org.gopivotal.app.http.converter.json.JsonToPdxInstanceHttpMessageConverter"/>
+      -->
       <bean class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter" p:marshaller-ref="jaxb2Marshaller" p:unmarshaller-ref="jaxb2Marshaller"/>
-      <!--bean class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter" p:marshaller-ref="xstreamMarshaller" p:unmarshaller-ref="xstreamMarshaller"/-->
-      <!--bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter"/-->
+      <!--
+      <bean class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter"/>
+      <bean class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter" p:marshaller-ref="xstreamMarshaller" p:unmarshaller-ref="xstreamMarshaller"/>
+      <bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter"/>
+      -->
     </mvc:message-converters>
   </mvc:annotation-driven>
 
@@ -42,6 +49,7 @@
       <value>
         json=application/json
         xml=application/xml
+        html=text/html
       </value>
     </property>
   </bean>
@@ -77,5 +85,15 @@
       </array>
     </property>
   </bean>
+
+  <!-- Swagger Configuration Bean -->
+  <!--
+  <bean id="documentationConfig" class="com.mangofactory.swagger.configuration.DocumentationConfig"/>
+  -->
+
+  <!-- Swagger custom extensibility module (bean). Has overridden methods to customize the document generation. -->
+  <!--
+  <bean id="extensibilityModule" class="com.mangofactory.swagger.springmvc.example.config.ExampleExtensibilityModule"/>
+  -->
 
 </beans>

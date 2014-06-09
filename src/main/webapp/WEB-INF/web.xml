@@ -7,13 +7,13 @@
   <display-name>GemFire Developer REST API</display-name>
 
   <description>
-    Web deployment descriptor declaring the Developer REST interface and API for GemFire.
+    Web deployment descriptor declaring the Developer REST Interface and API for GemFire.
   </description>
 
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>/META-INF/gemfire/cache-config.xml</param-value>
-    <!--param-value>/META-INF/gemfire/client-cache-config.xml</param-value-->
+    <param-value>/META-INF/gemfire/gemfire-cache.xml</param-value>
+    <!--param-value>/META-INF/gemfire/gemfire-client-cache.xml</param-value-->
   </context-param>
 
   <filter>
@@ -42,6 +42,7 @@
     <load-on-startup>1</load-on-startup>
   </servlet>
 
+  <!--
   <servlet>
     <description>
       The Spring DispatcherServlet (FrontController) handling all HTTP requests to the Spring Data REST
@@ -49,18 +50,21 @@
     </description>
     <servlet-name>rest-exporter</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-    <!--async-supported>true</async-supported-->
+    &lt;!&ndash;async-supported>true</async-supported&ndash;&gt;
     <load-on-startup>1</load-on-startup>
   </servlet>
+  -->
 
   <servlet-mapping>
     <servlet-name>gemfire-api</servlet-name>
     <url-pattern>/*</url-pattern>
   </servlet-mapping>
 
+  <!--
   <servlet-mapping>
     <servlet-name>rest-exporter</servlet-name>
     <url-pattern>/rest-exporter/*</url-pattern>
   </servlet-mapping>
+  -->
 
 </web-app>

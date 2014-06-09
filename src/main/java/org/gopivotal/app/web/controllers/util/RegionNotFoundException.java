@@ -4,11 +4,11 @@ package org.gopivotal.app.web.controllers.util;
  * The RegionNotFoundException class is a RuntimeException indicating that a Region could not be found in the Cache.
  * <p/>
  * @author John Blum
- * @see java.lang.RuntimeException
+ * @see org.gopivotal.app.web.controllers.util.ResourceNotFoundException
  * @since 7.5
  */
 @SuppressWarnings("unused")
-public class RegionNotFoundException extends RuntimeException {
+public class RegionNotFoundException extends ResourceNotFoundException {
 
   public RegionNotFoundException() {
   }
