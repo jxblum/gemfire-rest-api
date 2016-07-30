@@ -25,7 +25,7 @@
 
   <properties>
     <easymock.version>3.2</easymock.version>
-    <gemfire.version>7.5</gemfire.version>
+    <gemfire.version>8.0.0</gemfire.version>
     <guava.version>15.0</guava.version>
     <jackson.version>2.2.0</jackson.version>
     <jansi.verson>1.11</jansi.verson>
@@ -35,9 +35,9 @@
     <junit.version>4.11</junit.version>
     <mockito.version>1.9.5</mockito.version>
     <multithreadedtc.version>1.01</multithreadedtc.version>
-    <spring.version>3.2.9.RELEASE</spring.version>
-    <spring-data-commons.version>1.8.0.RELEASE</spring-data-commons.version>
-    <spring-data-gemfire.version>1.4.0.RELEASE</spring-data-gemfire.version>
+    <spring.version>3.2.11.RELEASE</spring.version>
+    <spring-data-commons.version>1.9.0.RELEASE</spring-data-commons.version>
+    <spring-data-gemfire.version>1.5.0.RELEASE</spring-data-gemfire.version>
     <spring-data-rest.version>2.0.0.RELEASE</spring-data-rest.version>
     <spring-hateoas.version>0.12.0.RELEASE</spring-hateoas.version>
     <sqlfire.version>1.0.3</sqlfire.version>

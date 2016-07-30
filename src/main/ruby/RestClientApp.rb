@@ -57,7 +57,8 @@ if __FILE__ == $0
   #puts p.inspect
   #puts p.to_json
 
-  uri = URI("http://localhost:8080/gemfire-api/v2/People/1");
+  #uri = URI("http://localhost:8080/gemfire-api/v1/People/1");
+  uri = URI("http://192.168.1.82:8080/gemfire-api/v1/People/1");
 
   personJson = Net::HTTP::get(uri);
 

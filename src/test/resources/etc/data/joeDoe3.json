@@ -1,0 +1,3 @@
+{ 'firstName' : 'Joe', 'middleName' : 'R', 'lastName' : 'Doe' }
+
+{"@type":"java.lang.Object","firstName":"Joe","middleName":"R","lastName":"Doe"}
